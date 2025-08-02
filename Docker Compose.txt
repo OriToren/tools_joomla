@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  joomla:
+    image: joomla:4
+    container_name: joomla
+    ports:
+      - "8080:80"  # Host port 8080 → Container port 80
+    volumes:
+      - joomla-www-data:/var/www/html  # Persists Joomla files
+    environment:
+      - JOOMLA_DB_HOST=joomla-db
+      - JOOMLA_DB_USER=joomla_user
+      - JOOMLA_DB_PASSWORD=joomla_pass
+      - JOOMLA_DB_NAME=joomla_db
+    networks:
+      - workdocker
+    depends_on:
+      - joomla-db
+
+  joomla-db:
+    image: mysql:5.7
+    container_name: joomla-db
+    volumes:
+      - joomla-mysql-data:/var/lib/mysql  # Persists MySQL data
+    environment:
+      - MYSQL_ROOT_PASSWORD=mц-secret-pw  # Note: Non-ASCII character (may cause issues)
+      - MYSQL_DATABASE=joomla_db
+      - MYSQL_USER=joomla_user
+      - MYSQL_PASSWORD=joomla_pass
+    networks:
+      - workdocker
+
+volumes:
+  joomla-www-data:  # Joomla files volume
+  joomla-mysql-data:  # MySQL data volume
+
+networks:
+  workdocke
