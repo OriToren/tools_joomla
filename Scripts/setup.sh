@@ -4,7 +4,6 @@ echo "=== Joomla Docker Setup ==="
 # Create network
 docker network create workdocker 2>/dev/null || echo "Network already exists."
 
-# Launch MySQL
 docker run -d --name joomla-db \
   --network workdocker \
   -e MYSQL_ROOT_PASSWORD=mц-secret-pw \
@@ -13,8 +12,6 @@ docker run -d --name joomla-db \
   -e MYSQL_PASSWORD=joomla_pass \
   -v joomla-mysql-data:/var/lib/mysql \
   mysql:5.7
-
-# Launch Joomla
 docker run -d --name joomla \
   --network workdocker \
   -p 8080:80 \
@@ -24,6 +21,5 @@ docker run -d --name joomla \
   -e JOOMLA_DB_NAME=joomla_db \
   -v joomla-www-data:/var/www/html \
   joomla:4
-
 echo "Joomla is running at http://localhost:8080"
 EOF
